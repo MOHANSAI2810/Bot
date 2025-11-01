@@ -133,3 +133,375 @@ a:hover {
     padding: 20px;
     box-shadow: 0px 5px 15px rgba(255, 105, 30, 0.3);
 }
+/* Health Assessment Styles */
+#health-assessment-button {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2em;
+}
+
+#health-assessment-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+#health-assessment-button.active {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    animation: pulse 2s infinite;
+}
+
+/* Health Assessment Modal */
+.health-modal {
+    max-width: 500px;
+}
+
+.assessment-progress {
+    margin: 20px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4ade80, #22c55e);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.progress-text {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.assessment-content {
+    text-align: center;
+    margin: 25px 0;
+}
+
+.current-sentence {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.sentence-text {
+    color: white;
+    font-size: 1.3em;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 20px 0;
+    line-height: 1.5;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Emotion Display */
+.emotion-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.emotion-icon {
+    font-size: 2em;
+    transition: all 0.3s ease;
+}
+
+.emotion-icon.large {
+    font-size: 3em;
+}
+
+.emotion-text {
+    color: white;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.emotion-confidence {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9em;
+    margin-left: auto;
+}
+
+/* Emotion-specific colors */
+.emotion-happy { color: #4ade80; }
+.emotion-sad { color: #60a5fa; }
+.emotion-angry { color: #f87171; }
+.emotion-calm { color: #a78bfa; }
+.emotion-excited { color: #fbbf24; }
+.emotion-neutral { color: #9ca3af; }
+.emotion-anxious { color: #f472b6; }
+.emotion-tired { color: #fb923c; }
+
+/* Voice Analysis */
+.voice-analysis {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.analysis-item {
+    margin-bottom: 10px;
+}
+
+.analysis-label {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.analysis-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.analysis-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.pitch-fill { background: linear-gradient(90deg, #667eea, #764ba2); }
+.intensity-fill { background: linear-gradient(90deg, #ff6b6b, #ee5a24); }
+.rate-fill { background: linear-gradient(90deg, #4ade80, #22c55e); }
+
+/* Assessment Controls */
+.assessment-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.health-btn {
+    background: linear-gradient(135deg, #4ade80, #22c55e) !important;
+}
+
+.health-btn:hover {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+}
+
+.next-btn {
+    background: linear-gradient(135deg, #60a5fa, #3b82f6) !important;
+}
+
+.next-btn:hover {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+/* Results Modal */
+.results-modal {
+    max-width: 550px;
+}
+
+.results-content {
+    margin: 20px 0;
+}
+
+.overall-emotion {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.emotion-summary h3 {
+    color: white;
+    margin: 0 0 5px 0;
+    font-size: 1.3em;
+}
+
+.emotion-summary p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.health-recommendations {
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.health-recommendations h4 {
+    color: white;
+    margin: 0 0 15px 0;
+    font-size: 1.1em;
+}
+
+.recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.recommendation-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border-left: 4px solid #4ade80;
+}
+
+.recommendation-item.warning {
+    border-left-color: #fbbf24;
+}
+
+.recommendation-item.important {
+    border-left-color: #f87171;
+}
+
+.recommendation-icon {
+    font-size: 1.2em;
+    margin-top: 2px;
+}
+
+.recommendation-text {
+    color: white;
+    font-size: 0.95em;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.assessment-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+    display: block;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8em;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    display: block;
+    color: white;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.results-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.emotion-pulse {
+    animation: emotionPulse 2s infinite;
+}
+
+@keyframes emotionPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .health-modal,
+    .results-modal {
+        width: 95%;
+        margin: 10px;
+    }
+    
+    .assessment-controls {
+        flex-direction: column;
+    }
+    
+    .assessment-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .overall-emotion {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .sentence-text {
+        font-size: 1.1em;
+        padding: 15px;
+    }
+}
+
+/* Loading States */
+.loading-assessment {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.completed-sentence {
+    border-color: #4ade80 !important;
+    background: rgba(74, 222, 128, 0.1) !important;
+}
+
+/* Status Colors */
+.status-positive {
+    color: #4ade80 !important;
+}
+
+.status-warning {
+    color: #fbbf24 !important;
+}
+
+.status-concern {
+    color: #f87171 !important;
+}
