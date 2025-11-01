@@ -1,4 +1,11 @@
 let isResponsePending = false; // Track if a response is being displayed
+let isSpeechConversationActive = false; // Track if speech conversation is active
+let speechConversationRecognition = null; // Speech recognition for conversation mode
+let audioContext = null;
+let analyser = null;
+let microphone = null;
+let javascriptNode = null;
+let isListening = false;
 
 function appendMessage(content, sender, codeBlocks = [], isHistory = false) {
     const chatBox = document.getElementById("chat-box");
@@ -153,8 +160,7 @@ function appendMessage(content, sender, codeBlocks = [], isHistory = false) {
         const soundButton = document.createElement("button");
         soundButton.innerHTML = '<i class="fas fa-volume-up"></i>'; // Sound icon
         soundButton.onclick = () => {
-            const utterance = new SpeechSynthesisUtterance(content);
-            window.speechSynthesis.speak(utterance);
+            speakText(content);
         };
 
         actionButtons.appendChild(copyButton);
@@ -190,7 +196,336 @@ function updateSendButton() {
     }
 }
 
+// Speech-to-Speech Conversation Functions
+function toggleSpeechConversation() {
+    if (isSpeechConversationActive) {
+        stopSpeechConversation();
+    } else {
+        startSpeechConversation();
+    }
+}
 
+function startSpeechConversation() {
+    isSpeechConversationActive = true;
+    updateSpeechConversationButton();
+    
+    // Show the speech conversation modal
+    const modal = document.getElementById('speech-conversation-modal');
+    modal.style.display = 'flex';
+    
+    // Initialize audio context for visualization
+    initializeAudioContext();
+}
+
+function stopSpeechConversation() {
+    isSpeechConversationActive = false;
+    isListening = false;
+    updateSpeechConversationButton();
+    
+    // Hide the speech conversation modal
+    const modal = document.getElementById('speech-conversation-modal');
+    modal.style.display = 'none';
+    
+    // Stop speech recognition
+    if (speechConversationRecognition) {
+        speechConversationRecognition.stop();
+    }
+    
+    // Stop audio analysis
+    stopAudioAnalysis();
+    
+    // Reset UI
+    resetVisualization();
+    document.getElementById('speech-status').textContent = 'Click the mic to start speaking...';
+    document.getElementById('speech-transcript').textContent = '';
+}
+
+function updateSpeechConversationButton() {
+    const speechConvButton = document.getElementById("speech-conversation-button");
+    if (isSpeechConversationActive) {
+        speechConvButton.classList.add("active");
+        speechConvButton.innerHTML = '<i class="fas fa-stop"></i>';
+        speechConvButton.title = "Stop Speech Conversation";
+    } else {
+        speechConvButton.classList.remove("active");
+        speechConvButton.innerHTML = '<i class="fas fa-comments"></i>';
+        speechConvButton.title = "Speech Conversation";
+    }
+}
+
+function initializeAudioContext() {
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+    } catch (e) {
+        console.error('Audio Context not supported:', e);
+    }
+}
+
+function startListening() {
+    if (!isSpeechConversationActive) return;
+
+    if (!speechConversationRecognition) {
+        initializeSpeechConversationRecognition();
+    }
+
+    // Start audio visualization
+    startAudioAnalysis();
+
+    // Start speech recognition
+    speechConversationRecognition.start();
+    isListening = true;
+
+    // Update UI
+    document.getElementById('start-listening-btn').style.display = 'none';
+    document.getElementById('stop-listening-btn').style.display = 'block';
+    document.getElementById('speech-status').textContent = 'Listening... Speak now!';
+    document.getElementById('speech-transcript').textContent = '';
+}
+
+function stopListening() {
+    isListening = false;
+    
+    // Stop speech recognition
+    if (speechConversationRecognition) {
+        speechConversationRecognition.stop();
+    }
+    
+    // Stop audio analysis
+    stopAudioAnalysis();
+    
+    // Update UI
+    document.getElementById('start-listening-btn').style.display = 'block';
+    document.getElementById('stop-listening-btn').style.display = 'none';
+    document.getElementById('speech-status').textContent = 'Click the mic to start speaking...';
+    resetVisualization();
+}
+
+function startAudioAnalysis() {
+    if (!audioContext || !analyser) return;
+
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        .then(function(stream) {
+            microphone = audioContext.createMediaStreamSource(stream);
+            microphone.connect(analyser);
+            
+            javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+            analyser.connect(javascriptNode);
+            javascriptNode.connect(audioContext.destination);
+            
+            javascriptNode.onaudioprocess = function() {
+                if (!isListening) return;
+                
+                const array = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(array);
+                
+                let values = 0;
+                const length = array.length;
+                
+                for (let i = 0; i < length; i++) {
+                    values += array[i];
+                }
+                
+                const average = values / length;
+                updateVisualization(average);
+            };
+        })
+        .catch(function(err) {
+            console.error('Error accessing microphone:', err);
+        });
+}
+
+function stopAudioAnalysis() {
+    if (javascriptNode) {
+        javascriptNode.disconnect();
+        javascriptNode = null;
+    }
+    if (microphone) {
+        microphone.disconnect();
+        microphone = null;
+    }
+}
+
+function updateVisualization(volume) {
+    const lines = document.querySelectorAll('.voice-lines .line');
+    const scale = Math.min(volume / 100, 1); // Normalize volume to 0-1
+    
+    lines.forEach((line, index) => {
+        const height = 5 + (scale * 30 * (index + 1) / lines.length);
+        line.style.height = `${height}px`;
+        line.style.opacity = 0.3 + (scale * 0.7);
+    });
+}
+
+function resetVisualization() {
+    const lines = document.querySelectorAll('.voice-lines .line');
+    lines.forEach(line => {
+        line.style.height = '5px';
+        line.style.opacity = '0.3';
+    });
+}
+
+function initializeSpeechConversationRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Your browser does not support speech recognition. Please use Chrome or Edge.");
+        return;
+    }
+
+    speechConversationRecognition = new SpeechRecognition();
+    speechConversationRecognition.continuous = false;
+    speechConversationRecognition.interimResults = true;
+    speechConversationRecognition.lang = "en-US";
+
+    speechConversationRecognition.onstart = function() {
+        console.log("Speech conversation recognition started");
+        document.getElementById('speech-status').textContent = 'Listening...';
+    };
+
+    speechConversationRecognition.onresult = async function(event) {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript;
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+
+        // Update transcript display
+        const transcriptElement = document.getElementById('speech-transcript');
+        if (finalTranscript) {
+            transcriptElement.textContent = finalTranscript;
+        } else {
+            transcriptElement.textContent = interimTranscript;
+        }
+
+        // If we have a final transcript, process it
+        if (finalTranscript.trim().length > 2) {
+            await processSpeechRequest(finalTranscript);
+        }
+    };
+
+    speechConversationRecognition.onerror = function(event) {
+        console.error("Speech recognition error:", event.error);
+        if (event.error === 'no-speech' || event.error === 'audio-capture') {
+            // Restart listening if no speech detected
+            if (isListening) {
+                setTimeout(() => {
+                    if (isListening && speechConversationRecognition) {
+                        speechConversationRecognition.start();
+                    }
+                }, 1000);
+            }
+            return;
+        }
+        document.getElementById('speech-status').textContent = `Error: ${event.error}`;
+    };
+
+    speechConversationRecognition.onend = function() {
+        console.log("Speech recognition ended");
+        if (isListening) {
+            // Restart recognition if still listening
+            setTimeout(() => {
+                if (isListening && speechConversationRecognition) {
+                    speechConversationRecognition.start();
+                }
+            }, 500);
+        }
+    };
+}
+
+async function processSpeechRequest(transcript) {
+    if (!transcript.trim()) return;
+
+    // Add user message to chat
+    appendMessage(transcript, "user-message");
+    
+    // Update status
+    document.getElementById('speech-status').textContent = 'Processing your request...';
+    
+    try {
+        // Get bot response
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: transcript }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.reply) {
+            // Display bot response
+            appendMessage(data.reply, "bot-message", data.code);
+            
+            // Speak the bot response
+            speakText(data.reply);
+            
+            // Update status
+            document.getElementById('speech-status').textContent = 'Response received! Click mic to speak again.';
+        }
+    } catch (error) {
+        console.error("Error in speech conversation:", error);
+        appendMessage("Sorry, I encountered an error.", "bot-message");
+        document.getElementById('speech-status').textContent = 'Error processing request. Click mic to try again.';
+    }
+    
+    // Clear transcript
+    document.getElementById('speech-transcript').textContent = '';
+}
+
+function speakText(text) {
+    // Clean the text for speech (remove code blocks, markdown, etc.)
+    const cleanText = text.replace(/\[CODE_BLOCK\].*?\[CODE_BLOCK\]/g, '')
+                         .replace(/\*\*(.*?)\*\*/g, '$1')
+                         .replace(/`(.*?)`/g, '$1')
+                         .replace(/\n/g, ' ');
+    
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    
+    // Stop any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    utterance.onstart = function() {
+        document.getElementById('speech-status').textContent = 'Speaking response...';
+    };
+    
+    utterance.onend = function() {
+        document.getElementById('speech-status').textContent = 'Response complete! Click mic to speak again.';
+        // Restart listening after speech ends
+        if (isListening) {
+            setTimeout(() => {
+                if (isListening && speechConversationRecognition) {
+                    speechConversationRecognition.start();
+                }
+            }, 1000);
+        }
+    };
+    
+    utterance.onerror = function(event) {
+        console.error("Speech synthesis error:", event.error);
+        document.getElementById('speech-status').textContent = 'Error speaking response. Click mic to try again.';
+    };
+    
+    window.speechSynthesis.speak(utterance);
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('speech-conversation-modal');
+    if (event.target === modal) {
+        stopSpeechConversation();
+    }
+});
+
+// Rest of your existing functions (sendMessage, file handling, etc.) remain the same...
 let selectedFile = null; // Store the selected file
 
 async function getWeather(city) {
@@ -240,7 +575,6 @@ function sendMessage() {
         document.getElementById("chat-box").appendChild(botThinking);
 
         // Send to YouTube processing endpoint
-        // In your sendMessage() function where you call /process-youtube:
         fetch("/process-youtube", {
         method: "POST",
         headers: { 
@@ -505,7 +839,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Update the image upload handler
 let selectedImageFile = null; // Store the selected image file
 
-let isListening = false; // Track if speech recognition is active
+let isListeningOld = false; // Track if speech recognition is active
 let recognition = null;  // Speech recognition object
 
 // Initialize speech recognition
@@ -533,7 +867,7 @@ function initializeSpeechRecognition() {
     };
 
     recognition.onend = function () {
-        isListening = false;
+        isListeningOld = false;
         updateMicButton(); // Update the mic button state
     };
 }
@@ -544,19 +878,19 @@ function toggleSpeechRecognition() {
         initializeSpeechRecognition();
     }
 
-    if (isListening) {
+    if (isListeningOld) {
         recognition.stop(); // Stop speech recognition
     } else {
         recognition.start(); // Start speech recognition
     }
-    isListening = !isListening;
+    isListeningOld = !isListeningOld;
     updateMicButton(); // Update the mic button state
 }
 
 // Update the mic button appearance
 function updateMicButton() {
     const micButton = document.getElementById("mic-button");
-    if (isListening) {
+    if (isListeningOld) {
         micButton.classList.add("active"); // Add a visual indicator (e.g., red mic)
     } else {
         micButton.classList.remove("active");
