@@ -1,0 +1,771 @@
+/* General styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #121212, #2b2b2b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('image.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* Style for the action buttons (copy and sound) */
+.action-buttons {
+    display: none;
+    position: absolute;
+    bottom: -30px; /* Position buttons below the response */
+    left: 0; /* Align buttons to the left */
+    gap: 5px;
+}
+
+/* Show buttons on hover */
+.bot-message:hover .action-buttons {
+    display: flex;
+}
+
+/* Button styling */
+.action-buttons button {
+    background-color: transparent;
+    color: #ffffff; /* Blue icon color */
+    border: none;
+    border-radius: 50%; /* Make buttons circular */
+    padding: 10px; /* Increased padding for larger buttons */
+    cursor: pointer;
+    font-size: 16px; /* Increased font size for larger icons */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.action-buttons button:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
+}
+
+/* Ensure the bot message container is positioned relatively */
+.bot-message {
+    position: relative;
+    margin-bottom: 30px; /* Add margin to accommodate buttons below */
+}
+
+/* Style for message icons */
+.message-icon {
+    width: 40px; /* Adjust size as needed */
+    height: 40px;
+    border-radius: 50%; /* Make icons circular */
+    object-fit: cover; /* Ensure the image fits well */
+}
+
+/* Bot message container */
+.bot-message-container {
+    display: flex;
+    align-items: flex-start; /* Align icon and message at the top */
+    margin-bottom: 30px; /* Space for action buttons */
+}
+
+/* User message container */
+.user-message-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end; /* Align user messages to the right */
+    margin-bottom: 10px; /* Space between messages */
+}
+
+/* Bot message box */
+.bot-message {
+    background-color: #f1f1f1; /* Light gray background for bot messages */
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%; /* Limit message width */
+    margin-left: 10px; /* Space between icon and message */
+}
+
+/* User message box */
+.user-message {
+    background-color: #007bff; /* Blue background for user messages */
+    color: white; /* White text for user messages */
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%; /* Limit message width */
+    margin-right: 10px; /* Space between icon and message */
+}
+
+/* Style for the disclaimer text */
+.disclaimer {
+    text-align: center; /* Center the text */
+    font-size: 14px; /* Smaller font size */
+    color: #ffffff; /* Gray color for the text */
+    margin-top: 5px; /* Space above the disclaimer */
+    position: absolute;
+    bottom: 3px;
+    right: 280px;
+}
+
+.disclaimer a {
+    color: #ffffff; /* Blue color for the link */
+    text-decoration: none; /* Remove underline */
+}
+
+.disclaimer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Chat container */
+.chat-container {
+    width: 68%; /* Adjusted width */
+    height: 93vh;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(0, 187, 255, 0.979);
+    box-shadow: 0px 10px 25px rgba(255, 105, 30, 0.3);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    right: 0.5%; /* Adjusted position */
+    transform: translate(0%, -50%);
+}
+
+.history-store {
+    width: 25.5%; /* Adjusted width */
+    height: 93vh;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(0, 187, 255, 0.979);
+    box-shadow: 0px 10px 25px rgba(255, 105, 30, 0.3);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 1%; /* Adjusted position */
+    transform: translate(-3%, -50%);
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 5px 15px rgba(255, 105, 30, 0.3);
+}
+
+/* Chat header */
+.chat-header {
+    text-align: center;
+    padding: 5px;
+    font-size: 10px;
+    font-weight: bold;
+    background: linear-gradient(to right, #8f97d1, #0627e3);
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    width: 100%;
+}
+
+.history-header {
+    text-align: center;
+    padding: 5px;
+    font-size: 10px;
+    font-weight: bold;
+    background: linear-gradient(to right, #0627e3, #8f97d1);
+    color: white;
+    border-top-left-radius: 15px; 
+    border-top-right-radius: 15px;
+    width: 100%;
+}
+.history-message {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    margin: 5px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: white;
+}
+
+/* Subheading below the title */
+.subheading {
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.8); /* Slightly lighter text */
+}
+
+/* Chat box */
+.chat-box {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Message bubbles */
+.message {
+    padding: 12px 18px;
+    border-radius: 18px;
+    margin: 8px;
+    max-width: 75%;
+    word-wrap: break-word;
+    font-size: 16px;
+}
+
+/* User messages */
+.user-message {
+    color: white;
+    align-self: flex-end;
+    text-align: right;
+    background: linear-gradient(to right, #39298c, #0575e6);
+    box-shadow: 0px 0px 8px #2cd6fc;
+}
+
+/* Bot messages */
+.bot-message {
+    background: linear-gradient(to right, #39298c, #0575e6);
+    color: white;
+    align-self: flex-start;
+    text-align: left;
+    box-shadow: 0px 3px 8px rgba(75, 121, 161, 0.3);
+}
+
+/* Add these styles to your existing CSS */
+#mic-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+#mic-button.active {
+    background-color: red; /* Change color when active */
+}
+
+#mic-button:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* Add these styles to your existing CSS */
+.loading-box {
+    width: 15px;
+    height: 15px;
+    background-color: #ffffff;
+    
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Add these styles to your existing CSS */
+/* Add these styles to your existing CSS */
+
+/* Toggle Button */
+.toggle-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.3s;
+}
+
+.toggle-button:hover {
+    background-color: #0056b3;
+}
+
+/* Add these styles to your existing CSS */
+
+
+
+
+/* When history is hidden */
+.history-hidden #history-store {
+    display: none; /* Hide history box */
+}
+
+.history-hidden #chat-container  {
+    position: absolute;
+    right: 12%;
+    width: 68%; /* Expand chat box to full width */
+    margin-right: 0; /* Remove margin for history box */
+}
+
+/* Code box */
+.code-box {
+    background: #181818;
+    color: #ffffff;
+    font-family: "Courier New", monospace;
+    padding: 12px;
+    border-radius: 12px;
+    margin: 10px;
+    max-width: 90%;
+    position: relative;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    box-shadow: inset 0px 0px 10px rgba(51, 255, 102, 0.2);
+}
+
+/* Copy button */
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+/* Input container */
+.input-container {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #000000;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 0px -3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Textarea */
+.input-container textarea {
+    flex: 1;
+    padding: 12px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    height: 42px;
+    resize: none;
+    transition: background 0.3s, border 0.3s;
+}
+
+.input-container textarea:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+/* Buttons in Input Container */
+.input-container button {
+    background: linear-gradient(to right, #08b5ea, #08b5ea);
+    border: none;
+    color: white;
+    border-radius: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    padding: 12px 18px;
+    font-size: 16px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.input-container button:hover {
+    background: linear-gradient(to right, #08b5ea, #08b5ea);
+    transform: scale(1.05);
+}
+.typing-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: white;
+    border-radius: 50%;
+    animation: typingAnimation 1.5s infinite;
+}
+
+/* Logout button */
+
+/* Modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.modal-content button {
+    margin: 10px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+}
+
+.modal-content button:first-child {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.modal-content button:last-child {
+    background-color: #ccc;
+}
+
+/* User Box */
+.user-box {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 5%;
+    width: 90%;
+    padding: 15px 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    text-transform: capitalize;
+}
+
+/* Logout Button */
+.logout-btn {
+    background: linear-gradient(45deg, #ff0000, #fffb02);
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(45deg, #ff2e00, #ff005e);
+    transform: scale(1.05);
+}
+
+.user_icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+}
+
+/* Site Icon */
+.site-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: 3.3%;
+    right: 1.4%;
+    object-fit: cover;
+}
+
+/* History Buttons */
+.history-button {
+    display: block;
+    width: 100%; /* Full width of container */
+    background: linear-gradient(to right, #08b5ea, #08b5ea);
+    color: white;
+    padding: 12px 15px;
+    margin: 5px; /* Remove margin */
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.history-button:hover {
+    background: linear-gradient(to right, #08b5ea, #08b5ea); /* Change color on hover */
+}
+.toggle-button {
+    top: 5px;
+    left: 5px;
+}
+.user-box .logout-btn {
+    background: linear-gradient(to right, #08b5ea, #08b5ea);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+    .chat-container, .history-store {
+        width: 100%;
+        height: 50vh;
+        position: relative;
+        top: unset;
+        left: unset;
+        right: unset;
+        transform: unset;
+        margin-bottom: 10px;
+    }
+     
+}
+
+/* Add this to chatbot_style.css */
+#refresh-button {
+    background-color: #007bff;
+    border: none;
+    color: rgb(255, 255, 255);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    left: 0%;
+    top: 0%
+}
+
+
+
+#refresh-button i {
+    font-size: 16px;
+}
+
+/* Add this to chatbot_style.css */
+#search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#search-input {
+    width: 95%;
+    height: 30px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#search-input:focus {
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+#search-button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    left: 83%;
+    top: 19%;
+}
+
+#search-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#search-button i {
+    font-size: 16px;
+}
+
+.highlight-button {
+    background-color: yellow; /* Highlight color */
+    color: black; /* Text color */
+    font-weight: bold; /* Make text bold */
+    border: 2px solid orange; /* Add a border */
+}
+
+.highlight {
+    background-color: yellow; /* Highlight color */
+    color: black; /* Text color */
+    font-weight: bold; /* Make text bold */
+}
+/* YouTube Response Styling */
+.youtube-response {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.youtube-thumbnail {
+    position: relative;
+    max-width: 100%;
+}
+
+.youtube-thumbnail img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.youtube-duration {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.youtube-info {
+    padding: 12px;
+    background: #f9f9f9;
+}
+
+.youtube-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+}
+
+.youtube-info p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.youtube-summary {
+    padding: 12px;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.youtube-actions {
+    padding: 8px 12px;
+    background: #f9f9f9;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.youtube-link {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #ff0000;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.youtube-link:hover {
+    background: #cc0000;
+}
+
+.youtube-analysis {
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 15px 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.video-header {
+    display: flex;
+    background: #f8f8f8;
+    padding: 12px;
+    gap: 15px;
+    align-items: center;
+}
+
+.video-thumb {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.video-meta h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.channel {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.stats {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #888;
+}
+
+.analysis-content {
+    padding: 15px;
+    background: white;
+}
+
+.analysis-content h4 {
+    color: #2c3e50;
+    margin: 15px 0 8px 0;
+    font-size: 15px;
+}
+
+.analysis-content ul {
+    padding-left: 20px;
+    margin: 8px 0;
+}
+
+.analysis-content li {
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 1.4;
+}

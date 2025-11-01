@@ -1,0 +1,13 @@
+flask
+python-dotenv
+bcrypt
+google-generativeai
+google-api-python-client
+youtube-transcript-api
+pymongo
+mysql-connector-python
+requests
+PyPDF2
+python-docx
+python-pptx
+gunicorn
